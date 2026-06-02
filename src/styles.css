@@ -1549,6 +1549,18 @@ textarea[readonly] {
   font-weight: 700;
 }
 
+.output-text-record-body {
+  padding: 8px 10px 10px;
+}
+
+.output-text-record-body[hidden] {
+  display: none;
+}
+
+.output-text-record-body pre {
+  margin: 0;
+}
+
 .proto-record {
   display: grid;
   gap: 8px;

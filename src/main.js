@@ -2241,7 +2241,7 @@ function renderPacketOutput(result, encoding) {
   if (entries.length) {
     sections.push(
       encoding === "text"
-        ? `<pre>${escapeHTML(jsonLinesText(result, "text"))}</pre>`
+        ? entries.map(renderOutputTextRecord).join("")
         : entries.map(renderOutputRecord).join(""),
     );
   }
@@ -2275,6 +2275,27 @@ function renderOutputRecord(entry) {
         </div>
       </header>
       <table ${collapsed ? "hidden" : ""}>${rows}</table>
+    </article>
+  `;
+}
+
+function renderOutputTextRecord(entry) {
+  const key = entry.key || String(entry.index);
+  const collapsed = state.collapsedOutputEntries.has(key);
+  return `
+    <article class="record output-record output-text-record${collapsed ? " output-record--collapsed" : ""}" data-output-entry="${escapeHTML(key)}">
+      <header data-output-action="toggle-collapse" aria-expanded="${collapsed ? "false" : "true"}">
+        <div class="record-title">
+          <strong>${escapeHTML(entry.title || `#${entry.index}`)}</strong>
+          <span>${escapeHTML(entry.summary || "")}</span>
+        </div>
+        <div class="record-actions">
+          <button class="record-collapse-button collapse-icon-button" type="button" aria-label="${collapsed ? "Expand" : "Collapse"} output record">${collapseChevron(collapsed)}</button>
+        </div>
+      </header>
+      <div class="output-text-record-body" ${collapsed ? "hidden" : ""}>
+        <pre>${escapeHTML(entry.text || prettyJSON(entry.parsed, entry.raw))}</pre>
+      </div>
     </article>
   `;
 }
@@ -2445,7 +2466,7 @@ function applyOutputRecordCollapsed(article, collapsed) {
     button.setAttribute("aria-label", `${collapsed ? "Expand" : "Collapse"} ${noun}`);
     button.innerHTML = collapseChevron(collapsed);
   }
-  const body = article.querySelector(":scope > table, :scope > .proto-record-body");
+  const body = article.querySelector(":scope > table, :scope > .proto-record-body, :scope > .output-text-record-body");
   if (!body) {
     return;
   }
@@ -4111,6 +4132,7 @@ function parsedEntries(result) {
       title: `#${item.index} ${outputTitleLabel(item.protocol, "record")}`,
       summary: jsonValueSummary(JSON.stringify(outputEntryFields(item))),
       parsed: item.parsed,
+      text: item.json || prettyJSON(item.parsed, item.json),
     }));
   }
   return (result.entries || []).map((packet, index) => ({
@@ -4119,6 +4141,8 @@ function parsedEntries(result) {
     title: `#${index + 1} ${outputTitleLabel(jsonPacketType(packet.value), "json")}`,
     summary: packetSummary(packet.value),
     parsed: packet.value ?? { raw: packet.raw },
+    raw: packet.raw,
+    text: packet.raw || prettyJSON(packet.value),
   }));
 }
 
