@@ -53,6 +53,10 @@ const flowPresetPackets = Object.freeze({
     "0000000500000001c633640100000007000000080000000900000002000000020000006c0000000a0000000b0000000100000001000000580000000c0000000000000000000003e80000000100000005000000000000007b00000000000000000000000000000002000000000000000000000000000001c8000000000000000000000000000000040000000300000000000000040000004c0000000b000000020000000c000000010000000200000034000000000000000200000000000000000000000000000000000000000000000000000000000000000000b000000000000000d",
 });
 
+const reflowBytePresetPackets = Object.freeze({
+  ping: "0200000000020200000000010800450000270001400040014e9ec0000201c633640208009fa2123400017265666c6f772d70696e67",
+});
+
 const goflow2InputPresets = Object.freeze({
   ipfix: {
     label: "IPFIX options + data",
@@ -415,6 +419,10 @@ const reflowJSONPresetRecords = Object.freeze({
 
 const reflowInputPresets = Object.freeze({
   ...goflow2InputPresets,
+  "bytes-ping": {
+    label: "Ethernet + IP + ICMP packet",
+    entries: () => bytesPresetEntries(["ping"]),
+  },
   "json-flow": {
     label: "ReFlow JSON flows (2)",
     entries: () => jsonPresetEntries([reflowJSONPresetRecords.flowA, reflowJSONPresetRecords.flowB]),
@@ -3459,6 +3467,16 @@ function flowPresetEntries(keys) {
     entry({
       type: "flow",
       text: flowPresetPackets[key],
+      receivedAt: presetReceivedAt(index),
+    }),
+  );
+}
+
+function bytesPresetEntries(keys) {
+  return keys.map((key, index) =>
+    entry({
+      type: "bytes",
+      text: reflowBytePresetPackets[key],
       receivedAt: presetReceivedAt(index),
     }),
   );

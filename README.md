@@ -77,7 +77,7 @@ Supported entry types by adapter:
 Import options:
 
 - **Add empty** creates a new bytes entry.
-- **Presets** append built-in IPFIX, NetFlow v9, NetFlow v5, sFlow, and ReFlow JSON examples.
+- **Presets** append built-in IPFIX, NetFlow v9, NetFlow v5, sFlow, Ethernet + IP + ICMP packet bytes, and ReFlow JSON examples.
 - **Import JSON input list** restores entries from an exported JSON file.
 - **Import PCAP as bytes** imports capture frames as raw packet bytes.
 - **Import PCAP as flow** imports flow datagrams and wraps them as synthetic UDP packets when needed for visualization.
