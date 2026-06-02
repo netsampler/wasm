@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"strconv"
 	"strings"
+	"sync"
 	"syscall/js"
 	"time"
 
@@ -25,10 +26,22 @@ var (
 
 func main() {
 	done := make(chan struct{})
+	var stopOnce sync.Once
 
 	// Expose a tiny JavaScript API and then park forever. The Go WASM runtime
 	// exits when main returns, which would tear down the exported js.Func.
 	api := js.Global().Get("Object").New()
+	runFunc := js.FuncOf(run)
+	importCaptureFunc := js.FuncOf(importCapture)
+	shutdownFunc := js.FuncOf(func(_ js.Value, _ []js.Value) any {
+		stopOnce.Do(func() {
+			js.Global().Set("reflow", js.Null())
+			close(done)
+			runFunc.Release()
+			importCaptureFunc.Release()
+		})
+		return nil
+	})
 	api.Set("metadata", jsObject(map[string]any{
 		"id":        wasmRuntimeID,
 		"version":   reflowVersion,
@@ -37,10 +50,12 @@ func main() {
 		"builtAt":   reflowBuildTime,
 		"userAgent": js.Global().Get("navigator").Get("userAgent").String(),
 	}))
-	api.Set("run", js.FuncOf(run))
-	api.Set("importCapture", js.FuncOf(importCapture))
+	api.Set("run", runFunc)
+	api.Set("importCapture", importCaptureFunc)
+	api.Set("shutdown", shutdownFunc)
 	js.Global().Set("reflow", api)
 	<-done
+	shutdownFunc.Release()
 }
 
 // run is the syscall/js boundary. It keeps large binary payloads as typed arrays

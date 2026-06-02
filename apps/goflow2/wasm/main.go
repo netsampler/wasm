@@ -4,6 +4,7 @@ package main
 
 import (
 	"encoding/json"
+	"sync"
 	"syscall/js"
 
 	"github.com/netsampler/goflow2-wasm/wasm/goflow2wasm"
@@ -19,8 +20,20 @@ var (
 
 func main() {
 	done := make(chan struct{})
+	var stopOnce sync.Once
 
 	api := js.Global().Get("Object").New()
+	runFunc := js.FuncOf(run)
+	inspectCaptureFunc := js.FuncOf(inspectCapture)
+	shutdownFunc := js.FuncOf(func(_ js.Value, _ []js.Value) any {
+		stopOnce.Do(func() {
+			js.Global().Set("goflow2", js.Null())
+			close(done)
+			runFunc.Release()
+			inspectCaptureFunc.Release()
+		})
+		return nil
+	})
 	api.Set("metadata", jsObject(map[string]any{
 		"id":        wasmRuntimeID,
 		"version":   goflowVersion,
@@ -29,10 +42,12 @@ func main() {
 		"builtAt":   goflowBuildTime,
 		"userAgent": js.Global().Get("navigator").Get("userAgent").String(),
 	}))
-	api.Set("run", js.FuncOf(run))
-	api.Set("inspectCapture", js.FuncOf(inspectCapture))
+	api.Set("run", runFunc)
+	api.Set("inspectCapture", inspectCaptureFunc)
+	api.Set("shutdown", shutdownFunc)
 	js.Global().Set("goflow2", api)
 	<-done
+	shutdownFunc.Release()
 }
 
 func run(_ js.Value, args []js.Value) any {

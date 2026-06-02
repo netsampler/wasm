@@ -555,6 +555,7 @@ let lastInputWireViewKey = "";
 let lastOutputWireViewKey = "";
 let protoDecodeCache = new Map();
 const adapterWorkspaceCache = new Map();
+const maxLogEntries = 200;
 let activeReceivedAtDraft = null;
 let activeReceivedAtPickerID = null;
 let inputWireViewUpdateTimer = 0;
@@ -797,6 +798,7 @@ function nextInputEntryID(entries = []) {
 
 function mount(route, options = {}) {
   disposeActiveRun();
+  disposeWasmRuntime(activeAdapter);
   if (options.preserveCurrent !== false) {
     cacheActiveAdapterWorkspace();
   }
@@ -1456,7 +1458,7 @@ function renderInput() {
   }
   updateInputMeta();
   updateRunAvailability();
-  updateInputWireView();
+  scheduleInputWireViewUpdate();
   updateReFlowBrowserPreview();
 }
 
@@ -2783,7 +2785,7 @@ async function loadWasm() {
   state.runtime = state.runtimes.find((runtime) => runtime.id === manifest.defaultVersion) || state.runtimes[0] || activeAdapter.fallbackRuntime;
   renderWasmSelector();
   await loadScript(state.runtime.execPath);
-  globalThis[activeAdapter.globalName] = null;
+  disposeWasmRuntime(activeAdapter);
   const go = new Go();
   const response = await fetch(state.runtime.wasmPath);
   const result = await WebAssembly.instantiateStreaming(response, go.importObject).catch(async () => {
@@ -2812,6 +2814,22 @@ async function switchWasmRuntime(runtimeID) {
   state.runtimeReady = false;
   setStatus("Switching WASM");
   await loadWasm();
+}
+
+function disposeWasmRuntime(adapter) {
+  const globalName = adapter?.globalName;
+  if (!globalName) {
+    return;
+  }
+  const api = globalThis[globalName];
+  try {
+    api?.shutdown?.();
+  } catch (error) {
+    appendLogEntries([logEntry("stderr", "runtime", `could not stop ${globalName}: ${error.message || error}`)]);
+  }
+  if (globalThis[globalName] === api) {
+    globalThis[globalName] = null;
+  }
 }
 
 async function fetchManifest(adapter) {
@@ -4867,7 +4885,7 @@ function logEntry(stream, stage, value) {
 }
 
 function setLogEntries(entries) {
-  state.logs = entries.filter(Boolean);
+  state.logs = entries.filter(Boolean).slice(-maxLogEntries);
   els.log.textContent = state.logs.join("\n");
   els.log.scrollTop = els.log.scrollHeight;
 }
