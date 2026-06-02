@@ -4,7 +4,7 @@ go 1.26
 
 require (
 	github.com/google/gopacket v1.1.19
-	github.com/netsampler/goflow2/v3 v3.0.0-20260601062659-3a1c75cba7d5
+	github.com/netsampler/goflow2/v3 v3.0.0-20260602185529-9729c3aa51de
 )
 
 require (
