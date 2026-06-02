@@ -465,7 +465,7 @@ const adapters = {
       commandOptions: { ...defaultCommandOptions },
       presetsCollapsed: false,
       useMapping: false,
-      protobufFraming: false,
+      protobufFraming: true,
       mappingYAML: defaultMapping,
     }),
     renderConfigPanel: renderAdapterConfigPanel,
