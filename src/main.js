@@ -322,13 +322,13 @@ const reflowEncoderPresets = {
   PCAP: `encoder:
   type: pcap
   pcap:
-    packet_source: auto
+    packet_source: pseudo
     link_type: ethernet
     snaplen: 65535`,
   PCAPNG: `encoder:
   type: pcapng
   pcap:
-    packet_source: auto
+    packet_source: pseudo
     link_type: ethernet
     snaplen: 65535`,
 };

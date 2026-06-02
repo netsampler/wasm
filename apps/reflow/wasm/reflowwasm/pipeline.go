@@ -105,7 +105,7 @@ func Run(ctx context.Context, req RunRequest) (*RunResult, error) {
 			stampEventTime(evt, fallbackAt, forceTime || evt == nil || evt.Kind == "control")
 			out, err := enc.Encode(evt)
 			if err != nil {
-				return fmt.Errorf("encode event: %w", err)
+				return encodeEventError(cfg.Encoder, evt, err)
 			}
 			receivedAt := eventTimeOr(evt, fallbackAt)
 			appendPayloads(out, receivedAt)

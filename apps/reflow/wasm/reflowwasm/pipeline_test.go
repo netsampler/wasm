@@ -327,6 +327,47 @@ sink:
 	}
 }
 
+func TestPcapEncodeErrorIncludesPacketDiagnostics(t *testing.T) {
+	_, err := Run(t.Context(), RunRequest{
+		ConfigYAML: `
+sources:
+  - network: stream
+    type: json
+    json:
+      flavor: reflow
+processor:
+  type: builtin
+aggregators: []
+encoder:
+  type: pcap
+  pcap:
+    packet_source: pseudo
+    link_type: ethernet
+sink:
+  type: stdout
+`,
+		Input: InputRequest{
+			Mode: "json",
+			Text: `{"bytes":10,"packets":1}`,
+		},
+	})
+	if err == nil {
+		t.Fatalf("expected pcap encode error")
+	}
+	msg := err.Error()
+	for _, want := range []string{
+		"encode pcap: cannot build pseudo packet",
+		"packet_source=pseudo",
+		"source.type=json",
+		"tuple_fields=missing src_addr,dst_addr,proto",
+		"available_fields=bytes,packets",
+	} {
+		if !strings.Contains(msg, want) {
+			t.Fatalf("expected error to contain %q, got:\n%s", want, msg)
+		}
+	}
+}
+
 func TestBytesInputAsFlowUsesFlowDecoder(t *testing.T) {
 	_, err := Run(t.Context(), RunRequest{
 		ConfigYAML: `
