@@ -5,6 +5,8 @@ Flows WASM is a browser workspace for decoding, transforming, and re-encoding fl
 - [GoFlow2](https://github.com/netsampler/goflow2) for decoding NetFlow, IPFIX, and sFlow datagrams.
 - ReFlow, from the GoFlow2 module, for browser-side flow pipeline experiments.
 
+Open the hosted app on [GitHub Pages](https://netsampler.github.io/wasm/).
+
 The app runs the WASM modules in a worker, renders packets with [WireView](https://github.com/radiantly/Wireview), and keeps the workflow local to the browser.
 
 ## Screenshots

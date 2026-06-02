@@ -912,7 +912,7 @@ function renderShell() {
                     <span>WireView</span>
                     <span id="wireview-status">No capture</span>
                   </div>
-                  <iframe id="wireview-frame" title="WireView capture visualization" src="/wireview.html"></iframe>
+                  <iframe id="wireview-frame" title="WireView capture visualization" src="${publicAssetPath("wireview.html")}"></iframe>
                 </section>`
               : ""
           }
@@ -967,7 +967,7 @@ function renderShell() {
               <span>WireView</span>
               <span id="output-wireview-status">No capture</span>
             </div>
-            <iframe id="output-wireview-frame" class="output-wireview-frame" title="Output WireView capture visualization" src="/wireview.html"></iframe>
+            <iframe id="output-wireview-frame" class="output-wireview-frame" title="Output WireView capture visualization" src="${publicAssetPath("wireview.html")}"></iframe>
           </section>
         </div>
       </section>
