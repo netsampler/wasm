@@ -1,0 +1,11 @@
+node_modules/
+dist/
+public/goflow2.wasm
+public/reflow.wasm
+public/wasm_exec.js
+public/wiregasm.bmp
+public/wiregasm.js
+public/wiregasm.wasm
+public/wireshark.svg
+apps/goflow2/wasm/goflow2wasm.test
+apps/reflow/wasm/reflowwasm.test

@@ -1,0 +1,25 @@
+{
+  "name": "flows-wasm",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run build:wasm && vite --host 127.0.0.1 --configLoader runner",
+    "build": "npm run build:wasm && vite build --configLoader runner",
+    "build:wasm": "npm run build:wasm:goflow2 && npm run build:wasm:reflow",
+    "build:wasm:goflow2": "node scripts/build-goflow2-wasm.mjs",
+    "build:wasm:reflow": "node scripts/build-reflow-wasm.mjs",
+    "copy:wasm-exec": "node scripts/copy-wasm-assets.mjs",
+    "test:wasm:goflow2": "cd apps/goflow2/wasm && GOOS=js GOARCH=wasm CGO_ENABLED=0 go test -exec=true ./...",
+    "test:wasm:reflow": "cd apps/reflow/wasm && GOOS=js GOARCH=wasm CGO_ENABLED=0 go test -exec=true -tags reflow_nopcap,reflow_noebpf ./..."
+  },
+  "dependencies": {
+    "@vueuse/core": "^14.3.0",
+    "vue": "^3.5.35",
+    "wireview": "git+https://github.com/radiantly/Wireview.git#main"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^6.0.7",
+    "vite": "^7.2.4"
+  }
+}

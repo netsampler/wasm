@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "defaultVersion": "current",
+  "versions": [
+    {
+      "id": "current",
+      "label": "v2.2.5-57-g3a1c75c (3a1c75cba7d5)",
+      "version": "v2.2.5-57-g3a1c75c",
+      "commit": "3a1c75cba7d5",
+      "module": "github.com/netsampler/goflow2/v3",
+      "builtAt": "2026-06-02T16:00:30.392Z",
+      "wasmPath": "/reflow.wasm",
+      "execPath": "/wasm_exec.js"
+    }
+  ]
+}
