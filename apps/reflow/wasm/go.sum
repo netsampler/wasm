@@ -8,6 +8,8 @@ github.com/netsampler/goflow2/v3 v3.0.0-20260601062659-3a1c75cba7d5 h1:xMYdJNxOM
 github.com/netsampler/goflow2/v3 v3.0.0-20260601062659-3a1c75cba7d5/go.mod h1:A9rlz4eGD/6IXj0eFsOW8UzkvuuTNCZFXpTxcX09tXw=
 github.com/netsampler/goflow2/v3 v3.0.0-20260602185529-9729c3aa51de h1:2runsqSWD7b3NkOSHvEnZkqcwTLZmU+8fCkueOLoXLo=
 github.com/netsampler/goflow2/v3 v3.0.0-20260602185529-9729c3aa51de/go.mod h1:A9rlz4eGD/6IXj0eFsOW8UzkvuuTNCZFXpTxcX09tXw=
+github.com/netsampler/goflow2/v3 v3.0.0-20260603064058-2d0cedd57fc4 h1:9O+ZS4kdRvbUUxDe6FTLNfWAbi9vuHeBFu9cd1rADqQ=
+github.com/netsampler/goflow2/v3 v3.0.0-20260603064058-2d0cedd57fc4/go.mod h1:A9rlz4eGD/6IXj0eFsOW8UzkvuuTNCZFXpTxcX09tXw=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=

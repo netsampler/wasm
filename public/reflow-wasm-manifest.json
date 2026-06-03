@@ -4,11 +4,11 @@
   "versions": [
     {
       "id": "current",
-      "label": "v3.0.0-20260602185529-9729c3aa51de (9729c3aa51de)",
-      "version": "v3.0.0-20260602185529-9729c3aa51de",
-      "commit": "9729c3aa51de",
+      "label": "v3.0.0-20260603064058-2d0cedd57fc4 (2d0cedd57fc4)",
+      "version": "v3.0.0-20260603064058-2d0cedd57fc4",
+      "commit": "2d0cedd57fc4",
       "module": "github.com/netsampler/goflow2/v3",
-      "builtAt": "2026-06-02T18:58:21.424Z",
+      "builtAt": "2026-06-03T07:15:53.190Z",
       "wasmPath": "/reflow.wasm",
       "execPath": "/wasm_exec.js"
     }
